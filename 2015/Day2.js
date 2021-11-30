@@ -1001,13 +1001,15 @@ const input = [
 [23,11,5],
 ]
 
+const input2 = [[2,3,4]]
+
 const getCube = (l, w, h) => {
-  const s1 = l*w
-  const s2 = l*h
-  const s3 = w*h
+  const s1 = 2*l+2*w
+  const s2 = 2*l+2*h
+  const s3 = 2*w+2*h
   const min = Math.min(s1, s2, s3)
 
-  const cubeA = (2*s1 + 2*s2 + 2*s3)
+  const cubeA = (l *w  *h )
 
   return cubeA + min
 }
