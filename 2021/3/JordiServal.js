@@ -33,14 +33,6 @@ const getPower = (i) => {
 }
 
 const getLifeRate = (i) => {  
-
-  const separator = (prev, value) =>  {
-    value = value.split('')
-    if(value[0] === '1') prev.ones.push(value)
-    else prev.zeros.push(value)
-    return prev
-  }
-
   const getO2 = (values, key) => {
     const {ones, zeros} = values.reduce((prev, value) =>  {
       if(value[key] === '1') prev.ones.push(value)
