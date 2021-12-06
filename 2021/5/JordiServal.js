@@ -9,8 +9,7 @@ const input = `0,9 -> 5,9
 0,0 -> 8,8
 5,5 -> 8,2`
 
-
-const parseInput = (i) => {
+const parseInput = (i, diag) => {
   let max = {x: undefined, y: undefined}
   
   return {max, lines: i.split('\n').map((pair) => {
@@ -21,7 +20,7 @@ const parseInput = (i) => {
     max.y = max.y === undefined || max.y < coord[3] ? coord[3] : max.y
     if(coord[0] === coord[2] || coord[1] === coord[3]){
       return {coord, diagonal: false}
-    } else if(Math.abs(coord[0] - coord[2]) === Math.abs(coord[1] - coord[3])){
+    } else if(Math.abs(coord[0] - coord[2]) === Math.abs(coord[1] - coord[3]) && diag){
       return {coord, diagonal: true }
     }
     return undefined
@@ -58,11 +57,12 @@ const countDangerZones = (field, lines) => {
   }, 0)
 }
 
-const getDangerZones = (i) => {
-  const {lines, max} = parseInput(i)
+const getDangerZones = (i, diag) => {
+  const {lines, max} = parseInput(i, diag)
   let travelField = Array(max.x+1).fill().map(()=>Array(max.y+1).fill(0))
   console.log({travelField, lines, max})
   return countDangerZones(travelField, lines)
 }
 
-console.log("Danger zones: ", getDangerZones(input))
+console.log("Danger zones: ", getDangerZones(input, false))
+console.log("Danger zones diagonal: ", getDangerZones(input, true))
