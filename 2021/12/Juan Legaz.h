@@ -21,7 +21,7 @@ public:
 
 	struct ExplorationNode {
 		ExplorationNode(std::string i_id) :
-			id(i_id), explorationIdx(0)
+			id(i_id), explorationIdx(0), allowSmall(false)
 		{}
 
 		ExplorationNode(std::string i_id, bool i_allowSmall) :
@@ -114,7 +114,6 @@ public:
 		}
 
 		std::stack<ExplorationNode> positionsToVisit;
-
 		positionsToVisit.push(ExplorationNode("start", true));
 
 		int paths = 0;
