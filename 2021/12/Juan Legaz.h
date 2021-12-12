@@ -11,6 +11,7 @@
 #include <cmath>
 #include <bitset>
 #include <queue>
+#include <stack>
 #include <algorithm>
 #include <array>
 
@@ -18,19 +19,33 @@ class C2021E12
 {
 public:
 
+	struct ExplorationNode {
+		ExplorationNode(std::string i_id) :
+			id(i_id), explorationIdx(0)
+		{}
+
+		ExplorationNode(std::string i_id, bool i_allowSmall) :
+			id(i_id), explorationIdx(0), allowSmall(i_allowSmall)
+		{}
+
+		std::string id;
+		size_t explorationIdx = 0;
+		bool allowSmall;
+	};
+
 	inline int64_t P1() {
 		std::ifstream file("E:/InputE12.txt");
 		std::string line;
-		std::map<std::string, std::set<std::string>> caves;
+		std::map<std::string, std::vector<std::string>> caves;
 		while (std::getline(file, line)) {
 			size_t tokenIdx = line.find('-');
 			std::string from = line.substr(0, tokenIdx);
 			std::string to = line.substr(tokenIdx + 1, line.length());
 
-			std::set<std::string>& connections = caves[from];
-			connections.emplace(to);
-			std::set<std::string>& connectionsTo = caves[to];
-			connectionsTo.emplace(from);
+			std::vector<std::string>& connections = caves[from];
+			connections.push_back(to);
+			std::vector<std::string>& connectionsTo = caves[to];
+			connectionsTo.push_back(from);
 		}
 
 		for (auto it = caves.begin(); it != caves.end();) {
@@ -42,36 +57,42 @@ public:
 			}
 		}
 
-		std::queue<std::pair<std::string, std::set<std::string>>> positionsToVisit;		
-		
-		positionsToVisit.push(std::make_pair("start", std::set<std::string>()));
+		std::stack<ExplorationNode> positionsToVisit;
+
+		positionsToVisit.push(ExplorationNode("start"));
+
 		int paths = 0;
 		while (positionsToVisit.size() > 0) {
-			std::pair<std::string, std::set<std::string>>& chain = positionsToVisit.front();
+			ExplorationNode& currNode = positionsToVisit.top();
 
-			for (const std::string& node : caves[chain.first]) {
-				if (node == "start") {
-					continue;
-				}
-
-				if (node == "end") {
-					++paths;
-				}
-				else {
-					bool isSmall = std::isupper(node[0]) == 0;
-					if (!isSmall || (isSmall && chain.second.find(node) == chain.second.cend())) {
-						// so much copy... baby jesus is crying
-						std::set<std::string> newSet = chain.second;
-						if (isSmall) {
-							newSet.emplace(node);
-						}
-						positionsToVisit.push(std::make_pair(node, std::move(newSet)));
-
-					}
-				}
+			if (currNode.explorationIdx == caves[currNode.id].size()) {
+				positionsToVisit.pop();
+				continue;
 			}
 
-			positionsToVisit.pop();
+			std::string node = caves[currNode.id][currNode.explorationIdx];
+			++currNode.explorationIdx;
+
+			if (node == "start") {
+				continue;
+			}
+			if (node == "end") {
+				++paths;
+				continue;
+			}
+
+			bool isSmall = std::isupper(node[0]) == 0;
+			if (isSmall) {
+				const auto& container = positionsToVisit._Get_container();
+				auto it = std::find_if(container.cbegin(), container.cend(), [&node](ExplorationNode exNode)->bool {return node == exNode.id; });
+
+				if (it == container.cend()) {
+					positionsToVisit.push(ExplorationNode(node));
+				}
+			}
+			else {
+				positionsToVisit.push(ExplorationNode(node));
+			}
 		}
 
 		return paths;
@@ -80,53 +101,59 @@ public:
 	inline int64_t P2() {
 		std::ifstream file("E:/InputE12.txt");
 		std::string line;
-		std::map<std::string, std::set<std::string>> caves;
+		std::map<std::string, std::vector<std::string>> caves;
 		while (std::getline(file, line)) {
 			size_t tokenIdx = line.find('-');
 			std::string from = line.substr(0, tokenIdx);
 			std::string to = line.substr(tokenIdx + 1, line.length());
 
-			std::set<std::string>& connections = caves[from];
-			connections.emplace(to);
-			std::set<std::string>& connectionsTo = caves[to];
-			connectionsTo.emplace(from);
+			std::vector<std::string>& connections = caves[from];
+			connections.push_back(to);
+			std::vector<std::string>& connectionsTo = caves[to];
+			connectionsTo.push_back(from);
 		}
 
-		std::queue<std::tuple<std::string, std::set<std::string>, bool>> positionsToVisit;
+		std::stack<ExplorationNode> positionsToVisit;
 
-		positionsToVisit.push(std::make_tuple("start", std::set<std::string>(), true));
+		positionsToVisit.push(ExplorationNode("start", true));
+
 		int paths = 0;
-
 		while (positionsToVisit.size() > 0) {
-			std::tuple<std::string, std::set<std::string>, bool>& chain = positionsToVisit.front();
+			ExplorationNode& currNode = positionsToVisit.top();
 
-			for (const std::string& node : caves[std::get<0>(chain)]) {
-				if (node == "start") {
-					continue;
-				}
+			if (currNode.explorationIdx == caves[currNode.id].size()) {
+				positionsToVisit.pop();
+				continue;
+			}
 
-				if (node == "end") {
-					++paths;
+			std::string node = caves[currNode.id][currNode.explorationIdx];
+			++currNode.explorationIdx;
+
+			if (node == "start") {
+				continue;
+			}
+			if (node == "end") {
+				++paths;
+				continue;
+			}
+
+			bool isSmall = std::isupper(node[0]) == 0;
+			if (isSmall) {
+				const auto& container = positionsToVisit._Get_container();
+				auto it = std::find_if(container.cbegin(), container.cend(), [&node](ExplorationNode exNode)->bool {return node == exNode.id; });
+
+				if (it == container.cend()) {
+					positionsToVisit.push(ExplorationNode(node, currNode.allowSmall));
 				}
 				else {
-					bool isSmall = std::isupper(node[0]) == 0;
-					if (!isSmall || (isSmall && std::get<1>(chain).find(node) == std::get<1>(chain).cend())) {
-						// baby jesus noooooooooooooooooooo
-						std::set<std::string> newSet = std::get<1>(chain);
-						if (isSmall) {
-							newSet.emplace(node);
-						}
-						positionsToVisit.push(std::make_tuple(node, std::move(newSet), std::get<2>(chain)));
-					}
-					else {
-						if (std::get<2>(chain)) {
-							positionsToVisit.push(std::make_tuple(node, std::get<1>(chain), false));
-						}
+					if (currNode.allowSmall) {
+						positionsToVisit.push(ExplorationNode(node, false));
 					}
 				}
 			}
-
-			positionsToVisit.pop();
+			else {
+				positionsToVisit.push(ExplorationNode(node, currNode.allowSmall));
+			}
 		}
 
 		return paths;
