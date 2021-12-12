@@ -60,7 +60,7 @@ public:
 				else {
 					bool isSmall = std::isupper(node[0]) == 0;
 					if (!isSmall || (isSmall && chain.second.find(node) == chain.second.cend())) {
-						// so much copies... baby jesus is crying
+						// so much copy... baby jesus is crying
 						std::set<std::string> newSet = chain.second;
 						if (isSmall) {
 							newSet.emplace(node);
