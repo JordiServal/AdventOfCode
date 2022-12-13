@@ -12,12 +12,11 @@ const parseInput = ([display, moves]) => {
   display.reverse().forEach((line) => {
     line.forEach((crate, index) => {
       if(crate !== '') stack[index] = [...stack[index], crate]
-      // if(crate !== '') stack[index].push(crate)
     })
   })
 
   moves = moves.split('\n').map(line => {
-    const [m, crates, f, start, t, end] = line.split(' ').map(n => parseInt(n))
+    const [, crates, , start, , end] = line.split(' ').map(n => parseInt(n))
     return {crates, start: start -1, end: end -1}
   })
   return {moves, stack}
