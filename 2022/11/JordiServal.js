@@ -3,13 +3,16 @@ const fs = require("fs");
 
 let input = fs
   .readFileSync(path.join(__dirname, "input.txt"), "utf8")
-  .toString()
+  .toString().replace(/\r/g, "")
   .split("\n\n").map(x => x.split('\n').map(y => y.trim().split(' ')))
 
 const OPS = {
   '*' : ([a, b], old) => (isNaN(a) ? old : a) * (isNaN(b) ? old : b),
   '+' : ([a, b], old) => (isNaN(a) ? old : a) + (isNaN(b) ? old : b)
 }
+
+const mcd = (a, b) => a ? mcd(b % a, a) : b
+const mcm = (a, b) => a * b / mcd(a, b)
 
 const parseInput = (input) => {
   return input.map(x => {
@@ -27,7 +30,7 @@ const parseInput = (input) => {
 
 const getMostActive = (monkeys, steps) => {
   for(let i = 0; i < steps; i++) {
-    monkeys = monkeys.map((m, index) => {
+    monkeys = monkeys.map((m) => {
       m.activity += m.items.length
       m.items.forEach(item => {
         item = Math.floor(m.op(m.values, item) / 3)
@@ -42,11 +45,12 @@ const getMostActive = (monkeys, steps) => {
 }
 
 const getMostActiveWorry = (monkeys, steps) => {
+  const manageWorry = monkeys.map(m => m.test).reduce(mcm)
   for(let i = 0; i < steps; i++) {
-    monkeys = monkeys.map((m, index) => {
+    monkeys = monkeys.map((m) => {
       m.activity += m.items.length
       m.items.forEach(item => {
-        item = m.op(m.values, item)
+        item = m.op(m.values, item) % manageWorry
         const destiny = item % m.test === 0 ? m.true : m.false
         // if(item % m.test === 0) item = m.test
         monkeys[destiny].items.push(item)
@@ -55,14 +59,11 @@ const getMostActiveWorry = (monkeys, steps) => {
       return m
     })
   }
-
-  console.log(monkeys)
-
   return monkeys.map(m => m.activity).sort((a, b) => b - a).splice(0, 2).reduce((a, b) => a * b)
 }
-
-const monkeys = parseInput(input)
-const part1 = getMostActive([...monkeys], 20)
-const part2 = getMostActiveWorry([...monkeys], 10000)
+let monkeysInput = parseInput(JSON.parse(JSON.stringify(input)))
+const part1 = getMostActive([...monkeysInput], 20)
+monkeysInput = parseInput(JSON.parse(JSON.stringify(input)))
+const part2 = getMostActiveWorry([...monkeysInput], 10000)
 
 console.log({part1, part2})
