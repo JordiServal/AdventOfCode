@@ -27,19 +27,20 @@ const checkTLS = ips => {
 
 const checkSSL = ips => {
   return ips.map(ip => {
-    const abas = ip.map(subip => {
-      const aba = []
+    const abaip = []
+    const abahyper = []
+    ip.forEach((subip, index) => {
       subip.forEach((c, i) => {
-        if(i > subip.length - 3) return false
         if(c === subip[i+1]) return false
         if(c !== subip[i+2]) return false
-        aba.push(c+subip[i+1]+c)
+        if(index % 2)
+          abahyper.push(c+subip[i+1]+c)
+        else
+          abaip.push(c+subip[i+1]+c)
       });
-      return aba
     })
-    return abas.some((aba, index) => {
-      if(index > abas.length-2) return false
-      return aba.some(subaba => abas[index+1].includes(subaba[1]+subaba[0]+subaba[1]))
+    return abaip.some((aba) => {
+      return abahyper.includes(aba[1]+aba[0]+aba[1])
     })
   }).filter(Boolean).length
 }
