@@ -22,44 +22,29 @@ const decompressFile = file => {
       decompressed.push(...Array(parseInt(marker[1])).fill(substring.join('')).join('').split(''))
     }
   } while(firstMarker !== -1)
-  return {decompressed, length: decompressed.length}
+  return decompressed.length
 }
 
 const decompressTotalFile = file => {
-  // let fileParse = file.split(/\(|\)/).map((str, i) => i % 2 === 0 ? {marker: false, lgh: str.length} : {marker: true, lgh: str.length + 2, long: parseInt(str.split('x')[0]), multiply: parseInt(str.split('x')[1])}).filter(x => x.lgh !== 0)
-  // do{
-  //   let decomp = []
-  //   do {
-  //     const current = fileParse.shift()
-  //     if(!current.marker) {
-  //       decomp.push(current)
-  //     } else {
-  //       let long = current.long, defit = undefined, next = {}
-  //       const decompMarker = []
-  //       while (long > 0) {
-  //         next = fileParse.shift()
-  //         if(next.lgh <= long) {
-  //           decompMarker.push(next)
-  //           long -= next.lgh
-  //         } else {
-  //           decompMarker.push(
-  //             {marker: false, lgh: long}
-  //           )
-  //           defit = {marker: false, lgh: next.lgh - long}
-  //           long = 0
-  //         }
-  //       }
-  //       for(let j=0; j<current.multiply; j++) {
-  //         decomp.push(...decompMarker)
-  //       }
-  //       if(defit) decomp.push(defit)
-  //     }
-  //   } while(fileParse.length)
-  //   fileParse = decomp
-  // } while(fileParse.some(x => x.marker))
-  // return fileParse.reduce((acc, cur) => acc + cur.lgh, 0)
+  const weights = file.map(x => 1)
+  let length = 0
+  for(let i = 0; i < file.length; i++) {
+    if(file[i] === '(') {
+      const nextI = file.indexOf(')', i)
+      const [long, multiply] = file.slice(i+1, nextI).join('').split('x').map(Number)
+      i = nextI
+
+      for(let j = i + 1; j < i + long + 1; j++) {
+        weights[j] = weights[j] * multiply
+      }
+    } else  {
+      length += weights[i]
+    }
+  }
+  return length
 }
 
 const part1 = decompressFile(parse(input))
-const part2 = decompressTotalFile(input.trim())
+const part2 = decompressTotalFile(parse(input))
+
 console.log({part1, part2})
