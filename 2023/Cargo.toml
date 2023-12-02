@@ -1,0 +1,10 @@
+[package]
+name = "advent-of-code"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "advent-of-code"
+path = "01/pau.rs"
+[dependencies]
+log = "0.4.20"
