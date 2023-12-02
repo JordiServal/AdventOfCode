@@ -51,15 +51,15 @@ fn map_text_to_number(line_text: &str) -> Option<String> {
         "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "1", "2", "3", "4",
         "5", "6", "7", "8", "9",
     ];
-    let mut ocurrences = Vec::new();
+    let mut occurrences = Vec::new();
     for number in numbers.iter().copied() {
-        let number_ocurrences: Vec<_> = line_text.match_indices(number).collect();
-        for ocurrence in number_ocurrences {
-            ocurrences.push(ocurrence);
+        let number_occurrences: Vec<_> = line_text.match_indices(number).collect();
+        for occurrence in number_occurrences {
+            occurrences.push(occurrence);
         }
     }
-    ocurrences.sort_by(|(index_one, _), (index_two, _)| index_one.cmp(index_two));
-    return ocurrences
+    occurrences.sort_by(|(index_one, _), (index_two, _)| index_one.cmp(index_two));
+    return occurrences
         .iter()
         .copied()
         .map(|(_, value)| value)
