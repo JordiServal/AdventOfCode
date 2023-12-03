@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [[bin]]
-name = "advent-of-code"
+name = "advent-of-code-01"
 path = "01/pau.rs"
-[dependencies]
-log = "0.4.20"
+
+[[bin]]
+name = "advent-of-code-02"
+path = "02/pau.rs"
