@@ -10,3 +10,7 @@ path = "01/pau.rs"
 [[bin]]
 name = "advent-of-code-02"
 path = "02/pau.rs"
+
+[[bin]]
+name = "advent-of-code-03"
+path = "03/pau.rs"
