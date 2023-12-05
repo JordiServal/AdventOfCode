@@ -14,3 +14,7 @@ path = "02/pau.rs"
 [[bin]]
 name = "advent-of-code-03"
 path = "03/pau.rs"
+
+[[bin]]
+name = "advent-of-code-04"
+path = "04/pau.rs"
