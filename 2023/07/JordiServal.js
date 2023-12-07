@@ -27,7 +27,9 @@ const checkCards = (a, b, i) => a[i] === b[i] ? checkCards(a, b, i+1) : cardLabe
  */
 const getTotalWinnings = players => {
   players = players.map(({cards, bib}) => {
-    let hand = cards.reduce((cont, curr) => {
+    let power = 0
+    let hand = cards.reduce((cont, curr, index) => {
+      power += (12 - cardLabel.indexOf(curr)) * Math.pow(100, 4-index) 
       if(!cont[curr]) cont[curr] = {value: curr, cont: 1}
       else cont[curr].cont += 1
       return cont
@@ -40,19 +42,19 @@ const getTotalWinnings = players => {
     else if(hand[0].cont === 2 && hand[1].cont === 2) hand = 2 
     else if(hand[0].cont === 2) hand = 1 
     else hand = 0
-    return {cards, bib, hand}
-  }).sort((a, b) => {
-    return a.hand === b.hand ? checkCards(a.cards, b.cards, 0) : a.hand - b.hand
-  })
+    power += (hand + 1) * Math.pow(100, 5)
+    return {cards, bib, hand, power}
+  }).sort((a, b) => a.power-b.power)
   return players.reduce((acc, curr, index) => acc + curr.bib * (index + 1), 0)
 }
 
 const cardLabel2 = ['A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J']
-const checkCardsJoker = (a, b, i) => a[i] === b[i] ? checkCardsJoker(a, b, i+1) : cardLabel2.indexOf(b[i]) - cardLabel2.indexOf(a[i])
 
 const getTotalWinningsJoker = (players) => {
   players = players.map(({cards, bib}) => {
-    let hand = cards.reduce((cont, curr) => {
+    let power = 0
+    let hand = cards.reduce((cont, curr, index) => {
+      power += (12 - cardLabel2.indexOf(curr)) * Math.pow(100, 4-index) 
       if(!cont[curr]) cont[curr] = {value: curr, cont: 1}
       else cont[curr].cont += 1
       return cont
@@ -72,10 +74,9 @@ const getTotalWinningsJoker = (players) => {
     else if(hand[0].cont === 2 && hand[1].cont === 2) hand = 2 
     else if(hand[0].cont === 2) hand = 1 
     else hand = 0
-    return {cards, bib, hand}
-  }).sort((a, b) => {
-    return a.hand === b.hand ? checkCardsJoker(a.cards, b.cards, 0) : a.hand - b.hand
-  })
+    power += (hand + 1) * Math.pow(100, 5)
+    return {cards, bib, hand, power}
+  }).sort((a, b) => a.power - b.power)
   return players.reduce((acc, curr, index) => acc + curr.bib * (index + 1), 0)
 }
 
