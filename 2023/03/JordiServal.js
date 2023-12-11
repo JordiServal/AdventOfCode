@@ -37,6 +37,7 @@ const getEngineSum = engine => {
       currentNumber.numbers = []
       currentNumber.valid = false
   });
+  console.log(engineParts.join(' '))
   return engineParts.reduce((acc, curr) => acc + curr)
 }
 
