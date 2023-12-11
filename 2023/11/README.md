@@ -81,3 +81,9 @@
 <p>In this example, after expanding the universe, the sum of the shortest path between all 36 pairs of galaxies is <code><em>374</em></code>.</p>
 <p>Expand the universe, then find the length of the shortest path between every pair of galaxies. <em>What is the sum of these lengths?</em></p>
 </article>
+
+<article class="day-desc"><h2 id="part2">--- Part Two ---</h2><p>The galaxies are much <em>older</em> (and thus much <em>farther apart</em>) than the researcher initially estimated.</p>
+<p>Now, instead of the expansion you did before, make each empty row or column <em><span title="And you have to have your pinky near your mouth when you do it.">one million</span> times</em> larger. That is, each empty row should be replaced with <code>1000000</code> empty rows, and each empty column should be replaced with <code>1000000</code> empty columns.</p>
+<p>(In the example above, if each empty row or column were merely <code>10</code> times larger, the sum of the shortest paths between every pair of galaxies would be <code><em>1030</em></code>. If each empty row or column were merely <code>100</code> times larger, the sum of the shortest paths between every pair of galaxies would be <code><em>8410</em></code>. However, your universe will need to expand far beyond these values.)</p>
+<p>Starting with the same initial image, expand the universe according to these new rules, then find the length of the shortest path between every pair of galaxies. <em>What is the sum of these lengths?</em></p>
+</article>
