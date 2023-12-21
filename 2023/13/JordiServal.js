@@ -60,57 +60,44 @@ const checkLines = (a, b, smudged) => {
   }), smudged]
 }
 
-const checkReflectSm = (arr, index, smudged) => {
-  let check = true, checkL = false
+const checkReflectSm = (arr, index) => {
+  let checkL = false, smudged = false
   if(index < arr.length / 2) {
     for(let i = index; i > 0; i--) {
       [checkL, smudged] = checkLines(arr[i - 1], arr[2 * index - i], smudged)
-      // console.log('Up', i, arr[i - 1], 2 * index - i, arr[2 * index - i], checkL, smudged)
-      if(!checkL) check = false
+      if(!checkL) {
+        break;
+      }
     }
   } else {
     for(let i = index; i < arr.length; i++) {
       [checkL, smudged] = checkLines(arr[i], arr[index * 2 - i - 1], smudged)
-      // console.log('Down', i, arr[i], index * 2 - i - 1, arr[index * 2 - i - 1], checkL, smudged)
-      if(checkL) check = false
+      if(!checkL) {
+        break;
+      }
     }
   }
-  return check && smudged ? index : 0
+  return checkL && smudged ? index : 0
 }
 
 const getSmudgeReflect = patterns => {
    return patterns.reduce((acc, pat) => {
-    console.log({acc})
-    let reflect = 0, smudged = false, check = false
+    let reflect = 0
     pat = pat.map(l => l.split(''))
     // Check horizontal
-    pat.reduce((prev, curr, index) => {
+    for(let i = 1; i<pat.length; i++) {
       if(!reflect) {
-        [check, smudged] = checkLines(prev, curr, smudged)
-        if(check) {
-          reflect = checkReflectSm(pat, index, smudged)
-        } else {
-          smudged = false
-        }
+        reflect = checkReflectSm(pat, i)
       }
-      return curr
-    })
+    }
     if(!reflect) {
-      console.log('Vertkca')
-      smudged = false
       // Check vertical
       const vertical = transpose(pat)
-      vertical.reduce((prev, curr, index) => {
-        if(!reflect) {
-          [check, smudged] = checkLines(prev, curr, smudged)
-          if(check) {
-            reflect = checkReflectSm(pat, index, smudged)
-          } else {
-            smudged = false
-          }
+      for(let i = 1; i<vertical.length; i++) {
+          if(!reflect) {
+          reflect = checkReflectSm(vertical, i)
         }
-        return curr
-      })
+      }
       acc += reflect
     } else {
       acc += reflect * 100
