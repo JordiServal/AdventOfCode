@@ -40,7 +40,11 @@ const getLowestLocationRange = ({seeds, orders}) => {
   } while (seeds.length)
   return lowest
 }
-
+const start = Date.now()
 const part1 = getLowestLocation(parse(input))
+const mid = Date.now()
 const part2 = getLowestLocationRange(parse(input))
+const end = Date.now()
 console.log({part1, part2})
+console.log(`Execution time: Part 1 -> ${(mid-start)/1000}s, Part 2 -> ${(end-mid) / 1000}s`)
+
