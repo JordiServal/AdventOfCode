@@ -1,4 +1,4 @@
-use std::{fs, cmp::min};
+use std::{cmp::min, fs};
 
 fn main() {
     let res_part_one = part_one();
@@ -28,21 +28,21 @@ fn part_two() -> i128 {
                 let fertilizer = get_mapping(soil, input_text.clone(), Mapping::SoilToFertilizer);
                 let water = get_mapping(fertilizer, input_text.clone(), Mapping::FertilizerToWater);
                 let light = get_mapping(water, input_text.clone(), Mapping::WaterToLight);
-                let temperature = get_mapping(light, input_text.clone(), Mapping::LightToTemperature);
+                let temperature =
+                    get_mapping(light, input_text.clone(), Mapping::LightToTemperature);
                 let humidity = get_mapping(
                     temperature,
-            input_text.clone(),
-            Mapping::TemperatureToHumidity,
-        );
-                min_location = min(min_location, get_mapping(
-                    humidity,
-            input_text.clone(),
-            Mapping::HumidityToLocation,
-        ));
+                    input_text.clone(),
+                    Mapping::TemperatureToHumidity,
+                );
+                min_location = min(
+                    min_location,
+                    get_mapping(humidity, input_text.clone(), Mapping::HumidityToLocation),
+                );
             }
         }
     }
-    return min_location
+    return min_location;
 }
 
 fn part_one() -> i128 {
@@ -97,7 +97,7 @@ impl Mapping {
 
 fn get_mapping(input: i128, input_text: String, mapping: Mapping) -> i128 {
     let mut output: Option<i128> = None;
-    let map_numbers: Vec<Vec<i128>> =  get_all_mappings(input_text, &mapping);
+    let map_numbers: Vec<Vec<i128>> = get_all_mappings(input_text, &mapping);
     for map_number in map_numbers {
         let destination = map_number[0];
         let source = map_number[1];
@@ -162,7 +162,7 @@ fn get_seeds_part_two(input_text: String) -> Vec<i128> {
             }
         }
     }
-    return seeds
+    return seeds;
 }
 
 fn get_vec_numbers(line: String) -> Vec<i128> {
@@ -177,7 +177,7 @@ fn get_vec_numbers(line: String) -> Vec<i128> {
 
 fn get_input() -> String {
     let contents =
-        fs::read_to_string("05/input-pau.txt").expect("Should have been able to read the file");
+        fs::read_to_string("2023/05/input-pau.txt").expect("Should have been able to read the file");
     contents
 }
 
@@ -191,14 +191,16 @@ mod tests {
     #[test]
     fn given_edge_below_when_mapping_map_it() {
         let input: i128 = 37;
-        let input_text = String::from("seeds: 79 14 55 13\n
+        let input_text = String::from(
+            "seeds: 79 14 55 13\n
                                                 algo\n
                                                 34 43 12\n
                                                 fertilizer-to-water map:\n
                                                 49 53 8\n
                                                 0 11 42\n
                                                 42 0 7\n
-                                                57 7 4");
+                                                57 7 4",
+        );
         let mapping = Mapping::FertilizerToWater;
         assert_eq!(0, get_mapping(input, input_text, mapping));
     }

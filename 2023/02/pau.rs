@@ -59,7 +59,7 @@ fn is_valid_set(colors_set: &str) -> bool {
 
 fn get_input() -> String {
     let contents =
-        fs::read_to_string("02/input-pau.txt").expect("Should have been able to read the file");
+        fs::read_to_string("2023/02/input-pau.txt").expect("Should have been able to read the file");
     contents
 }
 
