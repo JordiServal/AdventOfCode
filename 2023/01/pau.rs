@@ -8,8 +8,8 @@ fn main() {
 }
 
 fn part_one() -> u32 {
-    let contents =
-        fs::read_to_string("2023/01/input-pau.txt").expect("Should have been able to read the file");
+    let contents = fs::read_to_string("2023/01/input-pau.txt")
+        .expect("Should have been able to read the file");
     let res = contents
         .lines()
         .filter_map(|line| get_line_calibration_number(line))
@@ -18,8 +18,8 @@ fn part_one() -> u32 {
 }
 
 fn part_two() -> u32 {
-    let contents =
-        fs::read_to_string("2023/01/input-pau.txt").expect("Should have been able to read the file");
+    let contents = fs::read_to_string("2023/01/input-pau.txt")
+        .expect("Should have been able to read the file");
     let res = contents
         .lines()
         .filter_map(|line| {

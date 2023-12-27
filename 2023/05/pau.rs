@@ -176,8 +176,8 @@ fn get_vec_numbers(line: String) -> Vec<i128> {
 }
 
 fn get_input() -> String {
-    let contents =
-        fs::read_to_string("2023/05/input-pau.txt").expect("Should have been able to read the file");
+    let contents = fs::read_to_string("2023/05/input-pau.txt")
+        .expect("Should have been able to read the file");
     contents
 }
 

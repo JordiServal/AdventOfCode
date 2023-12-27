@@ -205,8 +205,8 @@ fn get_number(line: Vec<char>, position: usize) -> String {
 }
 
 fn get_input() -> String {
-    let contents =
-        fs::read_to_string("2023/03/input-pau.txt").expect("Should have been able to read the file");
+    let contents = fs::read_to_string("2023/03/input-pau.txt")
+        .expect("Should have been able to read the file");
     contents
 }
 #[cfg(test)]
