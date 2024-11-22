@@ -34,7 +34,7 @@ const denseHash = (lengths) => {
   const totalLength = 256
   const sequence = Array(totalLength).fill('').map((a, i) => i)
   let skipSize = 0, currentIndex = 0
-  for(let x = 0; x < 60; x++) {
+  for(let x = 0; x < 64; x++) {
     lengths.forEach(len => {
       const slice = sequence.splice(0, currentIndex)
       sequence.push(...slice)
@@ -51,7 +51,7 @@ const denseHash = (lengths) => {
   }
   const perChunk = 16 // items per chunk    
 
-  const result = sequence.reduce((resultArray, item, index) => { 
+  return sequence.reduce((resultArray, item, index) => { 
     const chunkIndex = Math.floor(index/perChunk)
 
     if(!resultArray[chunkIndex]) {
@@ -61,8 +61,7 @@ const denseHash = (lengths) => {
     resultArray[chunkIndex].push(item)
 
     return resultArray
-  }, []).map(chunk => xor(chunk).toString(16)).join('')
-  console.log(result)
+  }, []).map(chunk => xor(chunk).toString(16).padStart(2,'0')).join("")
 }
 
 const part1 = knotHash(parse(input))

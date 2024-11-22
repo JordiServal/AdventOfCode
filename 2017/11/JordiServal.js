@@ -17,12 +17,7 @@ const directions = {
   n: ([x, y]) => [x, y - 1],
 }
 
-const followDirections = instructions => {
-  let coords = [0, 0]
-  instructions.forEach(order => {
-    coords = directions[order](coords)
-  })
-
+const countSteps = (coords) => {
   let steps = 0
   while(coords[0] !== 0 || coords[1] !== 0) {
     if(coords[0] == 0) coords = coords[1] > 0 ? directions.n(coords) : directions.s(coords)
@@ -38,6 +33,15 @@ const followDirections = instructions => {
   return steps
 }
 
-const part1 = followDirections(parse(input))
-const part2 = (parse(input).length)
+const followDirections = instructions => {
+  let coords = [0, 0], maxSteps = 0, steps = 0
+  instructions.forEach(order => {
+    coords = directions[order](coords)
+    steps = countSteps(coords)
+    if(steps > maxSteps) maxSteps = steps
+  })
+  return [steps, maxSteps]
+}
+
+const [part1, part2] = followDirections(parse(input))
 console.log({part1, part2})       
