@@ -31,8 +31,11 @@ const problemDampener = reports => {
     return checker(rep, false) || rep.some((_, i) => checker(rep.filter((_, j) => i !== j)))
   }).filter(r => r).length
 }
-
+console.time('P1')
 const part1 = checkReports(parse(input))
+console.timeEnd('P1')
+console.time('P2')
 const part2 = problemDampener(parse(input))
+console.timeEnd('P2')
 
 console.log({part1, part2})
