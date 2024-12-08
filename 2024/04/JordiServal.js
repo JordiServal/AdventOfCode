@@ -84,11 +84,11 @@ const countCrossMAS = station => {
   return count
 }
 
-// console.time('p1')
+console.time('p1')
 const part1 = countXMAS(parse(input))
-// console.timeEnd('p1')
-// console.time('p2')
+console.timeEnd('p1')
+console.time('p2')
 const part2 = countCrossMAS(parse(input))
-// console.timeEnd('p2')
+console.timeEnd('p2')
 
 console.log({part1, part2})
