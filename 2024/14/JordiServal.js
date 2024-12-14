@@ -6,7 +6,7 @@ const input = fs
   .toString()
   .trim()
 
-const parse = i => i.split('\r\n').map(machine => machine.replaceAll(/p|=|v/g, '').split(' ').map(n => n.split(',').map(Number)))
+const parse = i => i.split('\n').map(machine => machine.replaceAll(/p|=|v/g, '').split(' ').map(n => n.split(',').map(Number)))
 
 const width = 101, height = 103, seconds = 100
 
@@ -32,8 +32,8 @@ const checkQuadrants = guards => {
 const lookForTree = guards => {
   const display = Array(height).fill('.').map(l => Array(width).fill('.'))
   let text = ''
-  for(let i=1; i<10;i++) {
-    text += `\n\n Loop ${i} \n\n`
+  for(let i=1; i<10000;i++) {
+    text += `\n\n Loop ${i} \n`
     const displayAux = JSON.parse(JSON.stringify(display))
     guards.forEach(([pos, vel]) => {
       pos = [(pos[0] + vel[0] * i) % width, (pos[1] + vel[1] * i) % height]
