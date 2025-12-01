@@ -70,29 +70,55 @@ const followOrders = ([map, orders]) => {
 }
 
 
-const move2 = (pos, order, map, left) => {
-  const posAux = DIRECTION[order](pos)
+const moveV = (pos, order, map, left) => {
+  const posAux = (left && order === '>') || (!left && order === '<') ? DIRECTION[order](DIRECTION[order](pos)) : DIRECTION[order](pos)
+  const nextPos = DIRECTION[order](pos)
+  console.log(pos, posAux, nextPos)
   const newPos = left ? map[posAux[1]][posAux[0]] : map[posAux[1]][posAux[0] - 1]
   const newPos2 = left ? map[posAux[1]][posAux[0] + 1] : map[posAux[1]][posAux[0]]
-  console.log(order + ' - ' + newPos + newPos2 + ' - '+ left + ' - ' +posAux + '\n' + map.map(l => l.join('')).join('\n'))
+  console.log(order + ' - ' + newPos + newPos2 + ' - '+ left + ' - ' +posAux)
   if(newPos === '#' || newPos2 === '#') return false
-  if(newPos === '[' || newPos === ']' || newPos2 === '[' || newPos2 === ']') {
+  if(newPos === '[' || newPos === ']') {
     let newMap = move2(posAux, order, map, newPos === '[')
     if(newPos2 === '[' && newMap)
       newMap = move2([posAux[0], posAux[1] + 1], order, newMap, true)
     if(!newMap) return false
     map = newMap
+    console.log(map.map(l => l.join('')).join('\n'))
   }
   map[pos[1]][pos[0]] = '.'
   map[pos[1]][left ? pos[0] + 1 : pos[0] - 1] = '.'
   if(left){
-    map[posAux[1]][posAux[0]] = '['
-    map[posAux[1]][posAux[0]+1] = ']'
+    map[nextPos[1]][nextPos[0]] = '['
+    map[nextPos[1]][nextPos[0]+1] = ']'
   } else {
-    map[posAux[1]][posAux[0]] = ']'
-    map[posAux[1]][posAux[0]-1] = '['
+    map[nextPos[1]][nextPos[0]] = ']'
+    map[nextPos[1]][nextPos[0]-1] = '['
   }
 
+  return map
+}
+const moveH = (pos, order, map, left) => {
+  const posAux = (left && order === '>') || (!left && order === '<') ? DIRECTION[order](DIRECTION[order](pos)) : DIRECTION[order](pos)
+  const nextPos = DIRECTION[order](pos)
+  const newPos = left ? map[posAux[1]][posAux[0]] : map[posAux[1]][posAux[0] - 1]
+  const newPos2 = left ? map[posAux[1]][posAux[0] + 1] : map[posAux[1]][posAux[0]]
+  console.log(newPos, left)
+  if(newPos === '#') return false
+  if(newPos === '[' || newPos === ']') {
+    let newMap = moveH(posAux, order, map, newPos === '[')
+    if(newPos2 === '[' && newMap)
+      newMap = moveH([posAux[0], posAux[1] + 1], order, newMap, true)
+    if(!newMap) return false
+    map = newMap
+  }
+  console.log(pos, nextPos, left)
+  map[pos[1]][pos[0]] = '.'
+  map[pos[1]][left ? pos[0] + 1 : pos[0] - 1] = '.'
+  map[nextPos[1]][left ? nextPos[0] : nextPos[0] - 1] = '['
+  map[nextPos[1]][left ? nextPos[0]+1 : nextPos[0]] = ']'
+  console.log(map.map(l => l.join('')).join('\n'))
+  
   return map
 }
 
@@ -102,13 +128,16 @@ const followOrders2 = ([map, orders]) => {
     x = l.join('').indexOf('@')
     return x !== -1  
   })
-
+  console.log('\n\n' + map.map(l => l.join('')).join('\n'))
   orders.forEach(o => {
+    console.log(x, y)
     const posAux = DIRECTION[o]([x, y])
     const newPos = map[posAux[1]][posAux[0]]
     if(newPos === '#') return
     if(newPos === '[' || newPos === ']') {
-      const newMap = move2(posAux, o, map, newPos === '[')
+      const newMap = o === '>' || o === '<' ? 
+        moveH(posAux, o, map, newPos === '[') : 
+        moveV(posAux, o, map, newPos === '[')
       if(!newMap) return
       map = newMap
     }
