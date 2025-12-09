@@ -1,3 +1,3 @@
-### --- Day 6: Trash Compactor ---
+### --- Day 7: Laboratories ---
 
-https://adventofcode.com/2025/day/6
+https://adventofcode.com/2025/day/7
